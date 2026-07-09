@@ -1,34 +1,164 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Student Registration</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+```html
+{% extends "base.html" %}
 
-<h2 style="text-align:center;">Student Registration</h2>
+{% block content %}
 
-<form action="/register" method="POST">
+<div class="row justify-content-center">
 
-    <input type="text" name="name" placeholder="Full Name" required><br><br>
+    <div class="col-md-8">
 
-    <input type="text" name="rollno" placeholder="Roll Number" required><br><br>
+        <div class="card shadow">
 
-    <input type="text" name="department" placeholder="Department" required><br><br>
+            <div class="card-header bg-success text-white text-center">
+                <h3>Student Registration</h3>
+            </div>
 
-    <input type="text" name="year" placeholder="Year" required><br><br>
+            <div class="card-body">
 
-    <input type="text" name="gender" placeholder="Gender" required><br><br>
+                <form method="POST">
 
-    <input type="email" name="email" placeholder="Email" required><br><br>
+                    <div class="row">
 
-    <input type="text" name="phone" placeholder="Phone Number" required><br><br>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text"
+                                   name="name"
+                                   class="form-control"
+                                   required>
+                        </div>
 
-    <input type="password" name="password" placeholder="Password" required><br><br>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Roll Number</label>
+                            <input type="text"
+                                   name="rollno"
+                                   class="form-control"
+                                   required>
+                        </div>
 
-    <input type="submit" value="Register">
+                    </div>
 
-</form>
+                    <div class="row">
 
-</body>
-</html>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Department</label>
+
+                            <select name="department"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">Select Department</option>
+                                <option>CSE</option>
+                                <option>ECE</option>
+                                <option>EEE</option>
+                                <option>MECH</option>
+                                <option>CIVIL</option>
+                                <option>AIML</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Year</label>
+
+                            <select name="year"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">Select Year</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Gender</label>
+
+                            <select name="gender"
+                                    class="form-select"
+                                    required>
+
+                                <option value="">Select Gender</option>
+                                <option>Male</option>
+                                <option>Female</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phone Number</label>
+
+                            <input type="tel"
+                                   name="phone"
+                                   class="form-control"
+                                   maxlength="10"
+                                   required>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">Email Address</label>
+
+                        <input type="email"
+                               name="email"
+                               class="form-control"
+                               required>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">Password</label>
+
+                        <input type="password"
+                               name="password"
+                               class="form-control"
+                               required>
+
+                    </div>
+
+                    <div class="d-grid">
+
+                        <button type="submit"
+                                class="btn btn-success btn-lg">
+
+                            Register
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="card-footer text-center">
+
+                Already have an account?
+
+                <a href="/login">
+                    Student Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

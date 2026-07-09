@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-6">
+
+        <div class="card shadow">
+
+            <div class="card-header bg-warning text-dark text-center">
+
+                <h3>Edit Hostel</h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST">
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Hostel Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="hostel_name"
+                            class="form-control"
+                            value="{{ hostel['hostel_name'] }}"
+                            required>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Hostel Type
+                        </label>
+
+                        <select
+                            name="gender"
+                            class="form-select"
+                            required>
+
+                            <option value="Male"
+                                {% if hostel['gender']=="Male" %}selected{% endif %}>
+                                Boys Hostel
+                            </option>
+
+                            <option value="Female"
+                                {% if hostel['gender']=="Female" %}selected{% endif %}>
+                                Girls Hostel
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <button class="btn btn-success w-100">
+                        Update Hostel
+                    </button>
+
+                </form>
+
+            </div>
+
+            <div class="card-footer text-center">
+
+                <a href="/hostels"
+                   class="btn btn-secondary">
+
+                    Back
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

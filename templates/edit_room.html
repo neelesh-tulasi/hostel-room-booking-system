@@ -5,79 +5,91 @@
 
 <div class="row justify-content-center">
 
-    <div class="col-md-5">
+    <div class="col-md-6">
 
         <div class="card shadow-lg">
 
-            <div class="card-header bg-dark text-white text-center">
+            <div class="card-header bg-warning text-dark text-center">
 
-                <h3>Administrator Login</h3>
+                <h3>Edit Room</h3>
 
             </div>
+
 
             <div class="card-body">
 
                 <form method="POST">
 
+
                     <div class="mb-3">
 
                         <label class="form-label">
-                            Username
+                            Room Number
                         </label>
 
                         <input
                             type="text"
-                            name="username"
+                            name="room_number"
                             class="form-control"
-                            placeholder="Enter admin username"
+                            value="{{ room['room_number'] }}"
                             required>
 
                     </div>
+
 
                     <div class="mb-3">
 
                         <label class="form-label">
-                            Password
+                            Capacity
                         </label>
 
                         <input
-                            type="password"
-                            name="password"
+                            type="number"
+                            name="capacity"
                             class="form-control"
-                            placeholder="Enter admin password"
+                            min="1"
+                            value="{{ room['capacity'] }}"
                             required>
 
                     </div>
+
 
                     <div class="d-grid">
 
                         <button
                             type="submit"
-                            class="btn btn-dark btn-lg">
+                            class="btn btn-warning btn-lg">
 
-                            Login
+                            Update Room
 
                         </button>
 
                     </div>
 
+
                 </form>
 
             </div>
 
+
             <div class="card-footer text-center">
 
-                <a href="/">
-                    ← Back to Home
+                <a href="/view_rooms"
+                   class="btn btn-secondary">
+
+                    ← Back to Rooms
+
                 </a>
 
             </div>
+
 
         </div>
 
     </div>
 
 </div>
+
 
 {% endblock %}
 ```

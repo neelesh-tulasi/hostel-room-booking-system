@@ -1,0 +1,100 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+<div class="col-md-6">
+
+
+<div class="card shadow">
+
+
+<div class="card-header bg-info text-white text-center">
+
+<h3>
+My Booking History
+</h3>
+
+</div>
+
+
+
+<div class="card-body text-center">
+
+
+{% if booking %}
+
+
+<h5 class="text-success">
+
+Room Allocated Successfully
+
+</h5>
+
+
+<hr>
+
+
+<p>
+
+<strong>Hostel:</strong>
+
+{{ booking["hostel_name"] }}
+
+</p>
+
+
+<p>
+
+<strong>Room Number:</strong>
+
+{{ booking["room_number"] }}
+
+</p>
+
+
+
+{% else %}
+
+
+<div class="alert alert-warning">
+
+No booking found.
+
+</div>
+
+
+{% endif %}
+
+
+
+</div>
+
+
+
+<div class="card-footer text-center">
+
+
+<a href="/student_dashboard"
+class="btn btn-primary">
+
+Back to Dashboard
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+</div>
+
+
+{% endblock %}
+```

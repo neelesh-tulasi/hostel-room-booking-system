@@ -5,12 +5,14 @@
 
 <div class="row justify-content-center">
 
-    <div class="col-md-5">
+    <div class="col-md-6">
 
         <div class="card shadow-lg">
 
             <div class="card-header bg-primary text-white text-center">
-                <h3>Student Login</h3>
+
+                <h3>Add New Hostel</h3>
+
             </div>
 
             <div class="card-body">
@@ -20,30 +22,40 @@
                     <div class="mb-3">
 
                         <label class="form-label">
-                            Email Address
+                            Hostel Name
                         </label>
 
                         <input
-                            type="email"
-                            name="email"
+                            type="text"
+                            name="hostel_name"
                             class="form-control"
-                            placeholder="Enter your email"
+                            placeholder="Enter hostel name"
                             required>
 
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-4">
 
                         <label class="form-label">
-                            Password
+                            Hostel Type
                         </label>
 
-                        <input
-                            type="password"
-                            name="password"
-                            class="form-control"
-                            placeholder="Enter your password"
+                        <select
+                            name="gender"
+                            class="form-select"
                             required>
+
+                            <option value="">Select Hostel Type</option>
+
+                            <option value="Male">
+                                Boys Hostel
+                            </option>
+
+                            <option value="Female">
+                                Girls Hostel
+                            </option>
+
+                        </select>
 
                     </div>
 
@@ -53,7 +65,7 @@
                             type="submit"
                             class="btn btn-primary btn-lg">
 
-                            Login
+                            Add Hostel
 
                         </button>
 
@@ -65,10 +77,11 @@
 
             <div class="card-footer text-center">
 
-                Don't have an account?
+                <a href="/hostels"
+                   class="btn btn-success">
 
-                <a href="/register">
-                    Register Here
+                    View All Hostels
+
                 </a>
 
             </div>

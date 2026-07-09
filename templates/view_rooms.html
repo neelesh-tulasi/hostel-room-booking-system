@@ -1,0 +1,173 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-info text-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h3 class="mb-0">
+                    Room Management
+                </h3>
+
+                <a href="/add_room"
+                   class="btn btn-light">
+
+                    + Add Room
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            {% if rooms %}
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+                            <th>Hostel</th>
+                            <th>Room No</th>
+                            <th>Capacity</th>
+                            <th>Occupied</th>
+                            <th>Available</th>
+                            <th width="180">Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for room in rooms %}
+
+                        <tr>
+
+                            <td>{{ loop.index }}</td>
+
+                            <td>{{ room[1] }}</td>
+
+                            <td>{{ room[2] }}</td>
+
+                            <td>{{ room[3] }}</td>
+
+                            <td>{{ room[4] }}</td>
+<td>{{ room[5] }}</td>
+
+<td>
+
+    <a href="/edit_room/{{ room[0] }}"
+       class="btn btn-warning btn-sm">
+        Edit
+    </a>
+
+    <a href="/delete_room/{{ room[0] }}"
+       class="btn btn-danger btn-sm"
+       onclick="return confirm('Delete this room?')">
+        Delete
+    </a>
+
+</td>
+
+                            <td>
+
+                                {% set available = room[3] - room[4] %}
+
+                                {% if available > 0 %}
+
+                                <span class="badge bg-success">
+
+                                    {{ available }} Available
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge bg-danger">
+
+                                    Full
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                <a href="/edit_room/{{ room[0] }}"
+                                   class="btn btn-warning btn-sm">
+
+                                    Edit
+
+                                </a>
+
+                                <a href="/delete_room/{{ room[0] }}"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Delete this room?')">
+
+                                    Delete
+
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="alert alert-warning text-center">
+
+                No rooms available.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <div class="card-footer d-flex justify-content-between">
+
+            <a href="/admin_dashboard"
+               class="btn btn-secondary">
+
+                ← Dashboard
+
+            </a>
+
+            <a href="/add_room"
+               class="btn btn-primary">
+
+                Add New Room
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

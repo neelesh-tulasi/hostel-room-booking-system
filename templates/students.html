@@ -1,0 +1,201 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+
+<div class="card shadow">
+
+
+<div class="card-header bg-success text-white">
+
+<h3>
+Student Management
+</h3>
+
+</div>
+
+<form method="GET"
+      action="/students"
+      class="row mb-4">
+
+
+    <div class="col-md-10">
+
+        <input type="text"
+               name="search"
+               class="form-control"
+               placeholder="Search Name, Roll Number or Department">
+
+    </div>
+
+
+    <div class="col-md-2">
+
+        <button class="btn btn-primary w-100">
+
+            Search
+
+        </button>
+
+    </div>
+
+
+</form>
+
+<div class="card-body">
+
+
+{% if students %}
+
+
+<div class="table-responsive">
+
+
+<table class="table table-bordered table-hover">
+
+
+<thead class="table-dark">
+
+
+<tr>
+
+<th>#</th>
+
+<th>Name</th>
+
+<th>Roll No</th>
+
+<th>Department</th>
+
+<th>Year</th>
+
+<th>Gender</th>
+
+<th>Email</th>
+<th>Action</th>
+
+</tr>
+
+
+</thead>
+
+
+<tbody>
+
+
+{% for student in students %}
+
+
+<tr>
+
+<td>
+{{ loop.index }}
+</td>
+
+
+<td>
+{{ student["name"] }}
+</td>
+
+
+<td>
+{{ student["rollno"] }}
+</td>
+
+
+<td>
+{{ student["department"] }}
+</td>
+
+
+<td>
+{{ student["year"] }}
+</td>
+
+
+<td>
+{{ student["gender"] }}
+</td>
+
+
+<td>
+{{ student["email"] }}
+</td>
+
+<td>
+
+<a href="/edit_student/{{ student['id'] }}"
+class="btn btn-warning btn-sm">
+
+Edit
+
+</a>
+
+
+<a href="/delete_student/{{ student['id'] }}"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Delete this student?')">
+
+Delete
+
+</a>
+
+</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+</tbody>
+
+
+</table>
+
+
+</div>
+
+
+{% else %}
+
+
+<div class="alert alert-warning">
+
+No students registered.
+
+</div>
+
+
+{% endif %}
+
+
+</div>
+
+
+<div class="card-footer">
+
+
+<a href="/admin_dashboard"
+class="btn btn-secondary">
+
+Back Dashboard
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+{% endblock %}
+```

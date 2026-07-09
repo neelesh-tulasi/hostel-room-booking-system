@@ -1,0 +1,121 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+    <div class="col-md-7">
+
+        <div class="card shadow-lg">
+
+            <div class="card-header bg-warning text-dark text-center">
+
+                <h3>Add Room</h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST">
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Select Hostel
+                        </label>
+
+                        <select
+                            name="hostel_id"
+                            class="form-select"
+                            required>
+
+                            <option value="">
+                                -- Select Hostel --
+                            </option>
+
+                            {% for hostel in hostels %}
+
+                            <option value="{{ hostel[0] }}">
+                                {{ hostel[1] }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Room Number
+                        </label>
+
+                        <input
+                            type="text"
+                            name="room_number"
+                            class="form-control"
+                            placeholder="Example: 101"
+                            required>
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label class="form-label">
+                            Capacity
+                        </label>
+
+                        <input
+                            type="number"
+                            name="capacity"
+                            class="form-control"
+                            min="1"
+                            placeholder="Enter room capacity"
+                            required>
+
+                    </div>
+
+                    <div class="d-grid">
+
+                        <button
+                            type="submit"
+                            class="btn btn-warning btn-lg">
+
+                            Add Room
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="card-footer d-flex justify-content-between">
+
+                <a href="/admin_dashboard"
+                   class="btn btn-secondary">
+
+                    ← Dashboard
+
+                </a>
+
+                <a href="/view_rooms"
+                   class="btn btn-info">
+
+                    View Rooms →
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

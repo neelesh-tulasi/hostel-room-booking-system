@@ -1,0 +1,194 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white text-center">
+
+            <h3>
+                Available Rooms
+            </h3>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            {% if rooms %}
+
+
+            <div class="table-responsive">
+
+
+                <table class="table table-bordered table-hover align-middle">
+
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Room Number</th>
+
+                            <th>Capacity</th>
+
+                            <th>Occupied</th>
+
+                            <th>Available Seats</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                    {% for room in rooms %}
+
+
+                    <tr>
+
+
+                        <td>
+                            {{ loop.index }}
+                        </td>
+
+
+                        <td>
+                            {{ room[1] }}
+                        </td>
+
+
+                        <td>
+                            {{ room[2] }}
+                        </td>
+
+
+                        <td>
+                            {{ room[3] }}
+                        </td>
+
+
+                        <td>
+
+
+                            {% set seats = room[2] - room[3] %}
+
+
+                            <span class="badge bg-success">
+
+                                {{ seats }}
+
+                            </span>
+
+
+                        </td>
+
+
+
+                        <td>
+
+
+                            <form method="POST"
+                                  action="/book_room">
+
+
+                                <input type="hidden"
+                                       name="room_id"
+                                       value="{{ room[0] }}">
+
+
+
+                                <input type="hidden"
+                                       name="room_number"
+                                       value="{{ room[1] }}">
+
+
+
+                                <button
+                                    type="submit"
+                                    class="btn btn-success btn-sm">
+
+
+                                    Book Room
+
+
+                                </button>
+
+
+
+                            </form>
+
+
+                        </td>
+
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+
+            {% else %}
+
+
+            <div class="alert alert-warning text-center">
+
+
+                No rooms are available in this hostel.
+
+
+            </div>
+
+
+            {% endif %}
+
+
+
+        </div>
+
+
+        <div class="card-footer text-center">
+
+
+            <a href="/book_hostel"
+               class="btn btn-secondary">
+
+                ← Change Hostel
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+```

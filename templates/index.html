@@ -1,40 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hostel Room Allocation System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+```html
+{% extends "base.html" %}
 
-<header>
-    <h1>Hostel Room Allocation System</h1>
+{% block content %}
 
-    <nav>
-        <a href="/">Home</a>
-        <a href="/register">Student Register</a>
-       <a href="/login">Student Login</a>
-        <a href="#">Admin Login</a>
-    </nav>
-</header>
+<div class="row justify-content-center">
 
-<section class="hero">
-    <h2>Welcome to Hostel Room Allocation System</h2>
+    <div class="col-lg-10">
 
-    <p>
-        This application helps students apply for hostel accommodation
-        and enables administrators to manage room allocation efficiently.
-    </p>
+        <div class="card shadow-lg">
 
-    <a href="/register">
-        <button>Apply for Hostel</button>
-    </a>
-</section>
+            <div class="card-body text-center p-5">
 
-<footer>
-    <p>&copy; 2026 Hostel Room Allocation System. All Rights Reserved.</p>
-</footer>
+                <h1 class="display-4 text-primary fw-bold">
+                    Hostel Management System
+                </h1>
 
-</body>
-</html>
+                <p class="lead mt-3">
+                    Welcome to the Hostel Management System. Students can register,
+                    log in, and book hostel rooms online, while administrators can
+                    manage hostels, rooms, and bookings efficiently.
+                </p>
+
+                <hr>
+
+                <div class="row mt-5">
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="card border-success h-100 shadow">
+
+                            <div class="card-body">
+
+                                <h3 class="text-success">
+                                    👨‍🎓 Student
+                                </h3>
+
+                                <p>
+                                    Register a new account and access the student portal.
+                                </p>
+
+                                <a href="/register"
+                                   class="btn btn-success">
+                                    Register
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="card border-primary h-100 shadow">
+
+                            <div class="card-body">
+
+                                <h3 class="text-primary">
+                                    🔑 Login
+                                </h3>
+
+                                <p>
+                                    Already registered? Log in to book your hostel room.
+                                </p>
+
+                                <a href="/login"
+                                   class="btn btn-primary">
+                                    Student Login
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+
+                        <div class="card border-dark h-100 shadow">
+
+                            <div class="card-body">
+
+                                <h3 class="text-dark">
+                                    👨‍💼 Admin
+                                </h3>
+
+                                <p>
+                                    Manage hostels, rooms, and student bookings.
+                                </p>
+
+                                <a href="/admin"
+                                   class="btn btn-dark">
+                                    Admin Login
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+```

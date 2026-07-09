@@ -1,0 +1,152 @@
+```html
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-secondary text-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h3 class="mb-0">
+                    Student Bookings
+                </h3>
+
+                <a href="/admin_dashboard"
+                   class="btn btn-light">
+
+                    Dashboard
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body">
+
+
+            {% if bookings %}
+
+
+            <div class="table-responsive">
+
+
+                <table class="table table-bordered table-hover align-middle">
+
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Student Name</th>
+
+                            <th>Roll Number</th>
+
+                            <th>Hostel</th>
+
+                            <th>Room Number</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                    {% for booking in bookings %}
+
+
+                    <tr>
+
+
+                        <td>
+                            {{ loop.index }}
+                        </td>
+
+
+                        <td>
+                            {{ booking["name"] }}
+                        </td>
+
+
+                        <td>
+                            {{ booking["rollno"] }}
+                        </td>
+
+
+                        <td>
+                            {{ booking["hostel_name"] }}
+                        </td>
+
+
+                        <td>
+                            {{ booking["room_number"] }}
+                        </td>
+
+
+                        <td>
+
+
+                            <a href="/cancel_booking/{{ booking['rollno'] }}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Cancel this booking?')">
+
+
+                                Cancel
+
+
+                            </a>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <div class="alert alert-warning text-center">
+
+                No bookings available.
+
+            </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
+```

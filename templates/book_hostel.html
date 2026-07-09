@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Select Hostel</title>
+</head>
+
+<body>
+
+
+<h1>Select Your Hostel</h1>
+
+
+{% if hostels %}
+
+{% for hostel in hostels %}
+
+
+<form action="/book_hostel" method="POST">
+
+
+<input type="hidden"
+       name="hostel_id"
+       value="{{ hostel[0] }}">
+
+
+<h2>
+{{ hostel[1] }}
+</h2>
+
+
+<p>
+{{ hostel[2] }}
+</p>
+
+
+<button type="submit">
+Select Hostel
+</button>
+
+
+</form>
+
+
+<hr>
+
+
+{% endfor %}
+
+
+{% else %}
+
+<h3>
+No hostel available for your gender
+</h3>
+
+{% endif %}
+
+
+
+<a href="/student_dashboard">
+<button>
+Back
+</button>
+</a>
+
+
+</body>
+
+</html>
