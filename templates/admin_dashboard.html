@@ -205,7 +205,30 @@ Available Rooms
             </div>
 
         </div>
+<div class="col-md-4 mb-4">
 
+    <div class="card shadow h-100">
+
+        <div class="card-body text-center">
+
+            <h1>👨‍💼</h1>
+
+            <h4>Manage Admins</h4>
+
+            <p>
+                Add, edit, view and delete administrator accounts.
+            </p>
+
+            <a href="/admins"
+               class="btn btn-dark">
+                Open
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
         <div class="col-md-4">
 
             <div class="card shadow h-100">
@@ -225,6 +248,7 @@ Available Rooms
                         Open
                     </a>
 
+                   
                 </div>
 
             </div>
@@ -255,7 +279,68 @@ Available Rooms
             </div>
 
         </div>
-```html
+        <div class="card shadow h-100">
+
+    <div class="card-body text-center">
+
+        <h1>👤</h1>
+
+        <h4>My Profile</h4>
+
+        <p>
+            View and update admin details.
+        </p>
+
+        <a href="/admin_profile"
+           class="btn btn-dark">
+            Open
+        </a>
+
+    </div>
+
+</div>
+<div class="card shadow h-100">
+
+    <div class="card-body text-center">
+
+        <h1>🔐</h1>
+
+        <h4>Password Requests</h4>
+
+        <p>
+            Approve password reset requests.
+        </p>
+
+        <a href="/password_reset_requests"
+           class="btn btn-danger">
+            Open
+        </a>
+
+    </div>
+
+</div>
+<div class="card-header bg-dark text-white">
+
+    {% if session["admin_role"] == "Super Admin" %}
+
+        <h3>
+            👑 Super Admin Dashboard
+        </h3>
+<h4>
+Welcome {{ session["admin_name"] }}
+</h4>
+    {% else %}
+
+        <h3>
+            👤 Admin Dashboard
+        </h3>
+        <h4>
+Welcome {{ session["admin_name"] }}
+</h4>
+
+    {% endif %}
+
+</div>
 <!-- STUDENTS MANAGEMENT CARD -->
 
 <div class="col-md-4">
@@ -286,7 +371,7 @@ Available Rooms
     </div>
 
 </div>
-```
+
 
         <div class="col-md-4">
 
@@ -313,8 +398,6 @@ Available Rooms
 
         </div>
 
-    
-```...
     </div>
 
 </div>

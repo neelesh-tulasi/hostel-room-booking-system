@@ -105,8 +105,40 @@ Bookings
 </a>
 </li>
 
+
 <li class="nav-item">
-<a class="nav-link text-warning" href="/logout">
+<a class="nav-link" href="/admin_profile">
+My Profile
+</a>
+</li>
+
+
+{% if session["admin_role"] == "Super Admin" %}
+
+<li class="nav-item">
+<a class="nav-link" href="/admins">
+Manage Admins
+</a>
+</li>
+
+
+<li class="nav-item">
+<a class="nav-link" href="/password_reset_requests">
+Password Requests
+</a>
+</li> 
+
+<li class="nav-item">
+    <span class="nav-link text-white">
+        {{ session["admin_role"] }}
+    </span>
+</li>
+
+{% endif %}
+
+
+<li class="nav-item">
+<a class="nav-link text-warning" href="/admin_logout">
 Logout
 </a>
 </li>

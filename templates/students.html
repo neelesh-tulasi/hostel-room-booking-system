@@ -125,24 +125,32 @@ Student Management
 
 <td>
 
-<a href="/edit_student/{{ student['id'] }}"
-class="btn btn-warning btn-sm">
 
-Edit
+<a href="/edit_student/{{ student['id'] }}"
+   class="btn btn-warning btn-sm">
+
+    Edit
 
 </a>
+
+
+
+{% if session["admin_role"] == "Super Admin" %}
 
 
 <a href="/delete_student/{{ student['id'] }}"
-class="btn btn-danger btn-sm"
-onclick="return confirm('Delete this student?')">
+   class="btn btn-danger btn-sm"
+   onclick="return confirm('Delete this student?');">
 
-Delete
+    Delete
 
 </a>
 
-</td>
 
+{% endif %}
+
+
+</td>
 
 </tr>
 

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-warning">
+
+                    <h3>Edit Admin</h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+                        <div class="mb-3">
+                            <label>Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                class="form-control"
+                                value="{{ admin['name'] }}"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Username</label>
+                            <input
+                                type="text"
+                                name="username"
+                                class="form-control"
+                                value="{{ admin['username'] }}"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                value="{{ admin['email'] }}"
+                                required>
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label>Role</label>
+
+                            <select
+                                name="role"
+                                class="form-control"
+                                required>
+
+                                <option value="Super Admin"
+                                {% if admin["role"]=="Super Admin" %}selected{% endif %}>
+                                    Super Admin
+                                </option>
+
+                                <option value="Admin"
+                                {% if admin["role"]=="Admin" %}selected{% endif %}>
+                                    Admin
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <button class="btn btn-warning">
+                            Update Admin
+                        </button>
+
+                        <a href="/admins" class="btn btn-secondary">
+                            Cancel
+                        </a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

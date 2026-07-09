@@ -15,6 +15,12 @@ def get_connection():
     conn = sqlite3.connect("hostel_production.db")
     conn.row_factory = sqlite3.Row
     return conn
+def is_super_admin():
+
+    return (
+        "admin" in session and
+        session.get("admin_role") == "Super Admin"
+    )
 
 
 # ---------------- HOME ----------------
@@ -118,24 +124,444 @@ def login():
 
     return render_template("login.html")
 # ---------------- ADMIN LOGIN ----------------
+from werkzeug.security import check_password_hash
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
 
     if request.method == "POST":
 
-        username = request.form["username"]
+        username = request.form["username"].strip()
         password = request.form["password"]
 
-        if username == "admin" and password == "admin123":
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        SELECT admin_id,
+               name,
+               username,
+               hashed_password,
+               role
+        FROM admins
+        WHERE username=?
+        """, (username,))
+
+        admin = cursor.fetchone()
+
+        conn.close()
+
+        if admin is None:
+            return "Admin username not found."
+
+        if check_password_hash(admin["hashed_password"], password):
 
             session["admin"] = True
+            session["admin_id"] = admin["admin_id"]
+            session["admin_name"] = admin["name"]
+            session["admin_role"] = admin["role"]
 
-            return redirect("/admin_dashboard")
+            return redirect(url_for("admin_dashboard"))
 
-        return "Invalid Username or Password"
+        return "Incorrect Password."
 
     return render_template("admin_login.html")
+@app.route("/admin_forgot_password", methods=["GET", "POST"])
+def admin_forgot_password():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+
+        cursor.execute("""
+        SELECT *
+        FROM admins
+        WHERE username=?
+        """,
+        (username,))
+
+
+        admin = cursor.fetchone()
+
+
+        if admin is None:
+
+            conn.close()
+
+            return "Username not found."
+
+
+        cursor.execute("""
+        UPDATE admins
+
+        SET reset_request=1
+
+        WHERE username=?
+
+        """,
+        (username,))
+
+
+        conn.commit()
+        conn.close()
+
+
+        return """
+        Password reset request sent to Super Admin.
+        """
+
+
+    return render_template(
+        "admin_forgot_password.html"
+    )
+@app.route("/password_reset_requests")
+def password_reset_requests():
+
+    if "admin" not in session:
+        return redirect(url_for("admin"))
+
+    if session.get("admin_role") != "Super Admin":
+        return "Access Denied!"
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT
+        admin_id,
+        name,
+        username,
+        email
+    FROM admins
+    WHERE reset_request=1
+    """)
+
+    admins = cursor.fetchall()
+
+    conn.close()
+
+    return render_template(
+        "password_reset_requests.html",
+        admins=admins
+    )
+@app.route("/reset_admin_password/<int:admin_id>", methods=["GET", "POST"])
+def reset_admin_password(admin_id):
+
+    if "admin" not in session:
+        return redirect(url_for("admin"))
+
+    if session.get("admin_role") != "Super Admin":
+        return "Access Denied!"
+
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+
+    if request.method == "POST":
+
+        new_password = request.form["password"]
+
+        hashed_password = generate_password_hash(new_password)
+
+
+        cursor.execute("""
+        UPDATE admins
+
+        SET hashed_password=?,
+            reset_request=0
+
+        WHERE admin_id=?
+
+        """,
+        (
+            hashed_password,
+            admin_id
+        ))
+
+
+        conn.commit()
+        conn.close()
+
+
+        return redirect(
+            url_for("password_reset_requests")
+        )
+
+
+
+    cursor.execute("""
+    SELECT name, username
+    FROM admins
+    WHERE admin_id=?
+
+    """,
+    (admin_id,))
+
+
+    admin = cursor.fetchone()
+
+
+    conn.close()
+
+
+    return render_template(
+        "reset_admin_password.html",
+        admin=admin
+    )
+@app.route("/admin_logout")
+def admin_logout():
+
+    session.pop("admin", None)
+    session.pop("admin_id", None)
+    session.pop("admin_name", None)
+    session.pop("admin_role", None)
+
+    return redirect(url_for("admin"))
+
+@app.route("/add_admin", methods=["GET", "POST"])
+def add_admin():
+
+    if "admin" not in session:
+        return redirect(url_for("admin"))
+    if not is_super_admin():
+     return "Access Denied!"
+
+    # Only Super Admin can add admins
+    if session.get("admin_role") != "Super Admin":
+        return "Access Denied!"
+
+    if request.method == "POST":
+
+        name = request.form["name"]
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+        role = request.form["role"]
+
+        hashed_password = generate_password_hash(password)
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        # Check duplicate username/email
+        cursor.execute("""
+        SELECT *
+        FROM admins
+        WHERE username=? OR email=?
+        """, (username, email))
+
+        admin = cursor.fetchone()
+
+        if admin:
+            conn.close()
+            return "Username or Email already exists."
+
+        # Only one Super Admin
+        if role == "Super Admin":
+
+            cursor.execute("""
+            UPDATE admins
+            SET role='Warden'
+            WHERE role='Super Admin'
+            """)
+
+        cursor.execute("""
+        INSERT INTO admins
+        (name, username, email, hashed_password, role)
+
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            name,
+            username,
+            email,
+            hashed_password,
+            role
+        ))
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("admins"))
+
+    return render_template("add_admin.html")
+@app.route("/edit_admin/<int:admin_id>", methods=["GET", "POST"])
+def edit_admin(admin_id):
+
+    if "admin" not in session:
+        return redirect(url_for("admin"))
+    
+    if not is_super_admin():
+     return "Access Denied!"
+
+    # Only Super Admin can edit admins
+    if session.get("admin_role") != "Super Admin":
+        return "Access Denied!"
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+
+        name = request.form["name"]
+        username = request.form["username"]
+        email = request.form["email"]
+        role = request.form["role"]
+
+        # If promoting this admin to Super Admin,
+        # demote the current Super Admin first.
+        if role == "Super Admin":
+
+            cursor.execute("""
+            UPDATE admins
+            SET role='Warden'
+            WHERE role='Super Admin'
+            AND admin_id != ?
+            """, (admin_id,))
+
+        cursor.execute("""
+        UPDATE admins
+
+        SET
+            name=?,
+            username=?,
+            email=?,
+            role=?
+
+        WHERE admin_id=?
+        """,
+        (
+            name,
+            username,
+            email,
+            role,
+            admin_id
+        ))
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("admins"))
+
+    cursor.execute("""
+    SELECT *
+    FROM admins
+    WHERE admin_id=?
+    """, (admin_id,))
+
+    admin = cursor.fetchone()
+
+    conn.close()
+
+    return render_template(
+        "edit_admin.html",
+        admin=admin
+    )
+@app.route("/delete_admin/<int:admin_id>")
+def delete_admin(admin_id):
+
+    if "admin" not in session:
+        return redirect(url_for("admin"))
+    if not is_super_admin():
+        return "Access Denied!"
+
+    # Only Super Admin can delete admins
+    if session.get("admin_role") != "Super Admin":
+        return "Access Denied!"
+
+
+    # existing code
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Get the selected admin
+    cursor.execute("""
+    SELECT *
+    FROM admins
+    WHERE admin_id=?
+    """, (admin_id,))
+
+    admin = cursor.fetchone()
+
+    if admin is None:
+        conn.close()
+        return redirect(url_for("admins"))
+
+    # Prevent deleting yourself
+    if admin["admin_id"] == session["admin_id"]:
+        conn.close()
+        return "You cannot delete your own account."
+
+    # Prevent deleting the last Super Admin
+    if admin["role"] == "Super Admin":
+
+        cursor.execute("""
+        SELECT COUNT(*)
+        FROM admins
+        WHERE role='Super Admin'
+        """)
+
+        count = cursor.fetchone()[0]
+
+        if count == 1:
+            conn.close()
+            return "The last Super Admin cannot be deleted."
+
+    # Delete the admin
+    cursor.execute("""
+    DELETE FROM admins
+    WHERE admin_id=?
+    """, (admin_id,))
+
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("admins"))
+@app.route("/make_super_admin/<int:admin_id>")
+def make_super_admin(admin_id):
+
+    if "admin" not in session:
+        return redirect(url_for("admin"))
+    
+    if not is_super_admin():
+        return "Access Denied!"
+
+
+    # existing code
+
+    if session.get("admin_role") != "Super Admin":
+        return "Access Denied!"
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # Make the current Super Admin an Admin
+    cursor.execute("""
+    UPDATE admins
+    SET role='Admin'
+    WHERE role='Super Admin'
+    """)
+
+    # Promote the selected admin
+    cursor.execute("""
+    UPDATE admins
+    SET role='Super Admin'
+    WHERE admin_id=?
+    """, (admin_id,))
+
+    conn.commit()
+    conn.close()
+
+    # Update the session if you promoted yourself
+    if session["admin_id"] == admin_id:
+        session["admin_role"] = "Super Admin"
+
+    return redirect(url_for("admins"))
 
 # ---------------- ADMIN DASHBOARD ----------------
 
@@ -216,6 +642,168 @@ def admin_dashboard():
         total_bookings=total_bookings,
         available_rooms=available_rooms
     )
+@app.route("/admins")
+def admins():
+
+    if "admin" not in session:
+        return redirect(url_for("admin"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT
+        admin_id,
+        name,
+        username,
+        email,
+        role
+    FROM admins
+    ORDER BY admin_id
+    """)
+
+    admins = cursor.fetchall()
+
+    conn.close()
+
+    return render_template(
+        "admins.html",
+        admins=admins
+    )
+@app.route("/admin_profile", methods=["GET", "POST"])
+def admin_profile():
+
+    if "admin" not in session:
+        return redirect(url_for("admin"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if request.method == "POST":
+
+        name = request.form["name"]
+        email = request.form["email"]
+
+        cursor.execute("""
+        UPDATE admins
+
+        SET name=?,
+            email=?
+
+        WHERE admin_id=?
+
+        """,
+        (
+            name,
+            email,
+            session["admin_id"]
+        ))
+
+        conn.commit()
+
+        # Update session name
+        session["admin_name"] = name
+
+        conn.close()
+
+        return redirect(url_for("admin_profile"))
+
+
+    cursor.execute("""
+    SELECT
+        admin_id,
+        name,
+        username,
+        email,
+        role
+
+    FROM admins
+
+    WHERE admin_id=?
+
+    """,
+    (session["admin_id"],))
+
+
+    admin = cursor.fetchone()
+
+    conn.close()
+
+
+    return render_template(
+        "admin_profile.html",
+        admin=admin
+    )
+@app.route("/change_admin_password", methods=["GET", "POST"])
+def change_admin_password():
+
+    if "admin" not in session:
+        return redirect(url_for("admin"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+
+    if request.method == "POST":
+
+        old_password = request.form["old_password"]
+        new_password = request.form["new_password"]
+        confirm_password = request.form["confirm_password"]
+
+
+        cursor.execute("""
+        SELECT hashed_password
+        FROM admins
+        WHERE admin_id=?
+        """,
+        (session["admin_id"],))
+
+
+        admin = cursor.fetchone()
+
+
+        # Check old password
+        if not check_password_hash(
+            admin["hashed_password"],
+            old_password
+        ):
+            conn.close()
+            return "Old password is incorrect."
+
+
+        # Check new password confirmation
+        if new_password != confirm_password:
+            conn.close()
+            return "New passwords do not match."
+
+
+        hashed_password = generate_password_hash(new_password)
+
+
+        cursor.execute("""
+        UPDATE admins
+
+        SET hashed_password=?
+
+        WHERE admin_id=?
+
+        """,
+        (
+            hashed_password,
+            session["admin_id"]
+        ))
+
+
+        conn.commit()
+        conn.close()
+
+
+        return redirect(url_for("admin_profile"))
+
+
+    conn.close()
+
+    return render_template("change_admin_password.html")
 # ---------------- ADD HOSTEL ----------------
 
 @app.route("/add_hostel", methods=["GET", "POST"])
@@ -897,7 +1485,6 @@ gender,
         "edit_profile.html",
         student=student
     )
-# ---------------- VIEW STUDENTS ----------------
 
 # ---------------- VIEW / SEARCH STUDENTS ----------------
 
@@ -1031,6 +1618,13 @@ def delete_student(id):
 
     if "admin" not in session:
         return redirect(url_for("admin"))
+
+
+    if session.get("admin_role") != "Super Admin":
+        return "Access Denied!"
+
+
+    # your existing delete code
 
 
     conn = sqlite3.connect("hostel_production.db")

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h3>Admin Profile</h3>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <form method="POST">
+
+
+                        <div class="mb-3">
+
+                            <label>Name</label>
+
+                            <input
+                                type="text"
+                                name="name"
+                                class="form-control"
+                                value="{{ admin['name'] }}"
+                                required>
+
+                        </div>
+
+
+
+                        <div class="mb-3">
+
+                            <label>Username</label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ admin['username'] }}"
+                                readonly>
+
+                        </div>
+
+
+
+                        <div class="mb-3">
+
+                            <label>Email</label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                class="form-control"
+                                value="{{ admin['email'] }}"
+                                required>
+
+                        </div>
+
+
+
+                        <div class="mb-3">
+
+                            <label>Role</label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                value="{{ admin['role'] }}"
+                                readonly>
+
+                        </div>
+
+
+
+                        <button class="btn btn-dark">
+                            Update Profile
+                        </button>
+
+
+                        <a href="/change_admin_password"
+                           class="btn btn-warning">
+                            Change Password
+                        </a>
+
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
