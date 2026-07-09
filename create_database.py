@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS students(
 
     phone TEXT NOT NULL,
 
-    password TEXT NOT NULL
+    hashed_password TEXT NOT NULL
 )
 """)
 

@@ -25,7 +25,6 @@ def home():
 
 
 # ---------------- STUDENT REGISTER ----------------
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -49,11 +48,10 @@ def register():
 
             cursor.execute("""
             INSERT INTO students
-            (name, rollno, department, year, gender, email, phone, password)
+            (name, rollno, department, year, gender, email, phone, hashed_password)
 
-            VALUES (?,?,?,?,?,?,?,?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
-
             (
                 name,
                 rollno,
@@ -100,7 +98,7 @@ def login():
             gender,
             email,
             phone,
-            password
+            hashed_password
         FROM students
         WHERE email=?
         """, (email,))
@@ -109,8 +107,7 @@ def login():
 
         conn.close()
 
-        # Check hashed password
-        if student and check_password_hash(student["password"], password):
+        if student and check_password_hash(student["hashed_password"], password):
 
             session["rollno"] = student["rollno"]
             session["student_name"] = student["name"]
@@ -120,7 +117,6 @@ def login():
         return "Invalid Email or Password"
 
     return render_template("login.html")
-
 # ---------------- ADMIN LOGIN ----------------
 
 @app.route("/admin", methods=["GET", "POST"])
@@ -853,22 +849,23 @@ def edit_profile():
         hashed_password = generate_password_hash(password)
 
         cursor.execute("""
-        UPDATE students
-
-        SET name=?,
-            email=?,
-            phone=?,
-            password=?
-
-        WHERE rollno=?
-
-        """,
-       (
-    name,
-    email,
+UPDATE students
+SET
+    name=?,
+    department=?,
+    year=?,
+    gender=?,
+    phone=?,
+    email=?
+WHERE id=?
+""", (
+name,
+department,
+year,
+gender,
     phone,
-    hashed_password,
-    session["rollno"]
+    email,
+    id
 ))
 
 

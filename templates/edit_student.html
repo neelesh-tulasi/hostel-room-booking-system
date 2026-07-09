@@ -1,29 +1,116 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Student</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h2>Edit Student</h2>
+{% block content %}
 
-<form method="POST">
+<div class="container mt-4">
 
-    <input type="text" name="name" value="{{ student[0] }}" required><br><br>
+    <div class="card shadow">
 
-    <input type="text" name="department" value="{{ student[2] }}" required><br><br>
+        <div class="card-header bg-warning text-dark">
 
-    <input type="text" name="year" value="{{ student[3] }}" required><br><br>
+            <h3>Edit Student</h3>
 
-    <input type="text" name="gender" value="{{ student[4] }}" required><br><br>
+        </div>
 
-    <input type="email" name="email" value="{{ student[5] }}" required><br><br>
+        <div class="card-body">
 
-    <input type="text" name="phone" value="{{ student[6] }}" required><br><br>
+            <form method="POST">
 
-    <input type="submit" value="Update Student">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        value="{{ student['name'] }}"
+                        required>
+                </div>
 
-</form>
+                <div class="mb-3">
+                    <label class="form-label">Department</label>
+                    <input
+                        type="text"
+                        name="department"
+                        class="form-control"
+                        value="{{ student['department'] }}"
+                        required>
+                </div>
 
-</body>
-</html>
+                <div class="mb-3">
+                    <label class="form-label">Year</label>
+                    <input
+                        type="number"
+                        name="year"
+                        class="form-control"
+                        value="{{ student['year'] }}"
+                        min="1"
+                        max="4"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Gender</label>
+
+                    <select
+                        name="gender"
+                        class="form-select"
+                        required>
+
+                        <option value="Male"
+                        {% if student['gender']=="Male" %}selected{% endif %}>
+                            Male
+                        </option>
+
+                        <option value="Female"
+                        {% if student['gender']=="Female" %}selected{% endif %}>
+                            Female
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        value="{{ student['email'] }}"
+                        required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    <input
+                        type="tel"
+                        name="phone"
+                        class="form-control"
+                        value="{{ student['phone'] }}"
+                        required>
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-warning">
+
+                    Update Student
+
+                </button>
+
+                <a href="/students"
+                   class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
