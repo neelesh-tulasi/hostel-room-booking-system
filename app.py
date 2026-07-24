@@ -1105,6 +1105,7 @@ def book_hostel():
         return "Student not found."
 
     student_gender = student["gender"].strip().lower()
+    print("Student Gender =", student_gender)
 
     # Show matching hostels only
     cursor.execute("""
@@ -1113,6 +1114,9 @@ def book_hostel():
     """)
 
     all_hostels = cursor.fetchall()
+    print("Hostels in Database:")
+    for hostel in all_hostels:
+      print(hostel["hostel_name"], hostel["gender"])
 
     hostels = []
 
@@ -1134,6 +1138,7 @@ def book_hostel():
         return redirect(url_for("select_room", hostel_id=hostel_id))
 
     conn.close()
+    print("Matching Hostels =", len(hostels))
 
     return render_template("book_hostel.html", hostels=hostels)
 @app.route("/rooms/<int:hostel_id>")
