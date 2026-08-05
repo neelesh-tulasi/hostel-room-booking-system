@@ -98,7 +98,46 @@ http://127.0.0.1:5000
 
 ## 📸 Screenshots
 
-(Add screenshots of your application here.)
+### Student Registration
+
+![Student Registration](screenshots/studentregistration.png)
+
+---
+
+### Student Login
+
+![Student Login](screenshots/studentlogin.png)
+
+---
+
+### Student Dashboard
+
+![Student Dashboard](screenshots/studentdashboard.png)
+
+---
+
+### Hostel Selection
+
+![Hostel Selection](screenshots/hostelselection.png)
+
+---
+
+### Room Selection
+
+![Room Selection](screenshots/roomselection.png)
+
+---
+
+### Admin Dashboard
+
+![Admin Dashboard](screenshots/admindashboard.png)
+
+---
+
+### Student Management
+
+![Student Management](screenshots/studentmanagement.png)
+
 
 ---
 
