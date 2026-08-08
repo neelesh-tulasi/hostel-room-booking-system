@@ -5,6 +5,7 @@ from flask import send_file
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 from reportlab.lib.styles import getSampleStyleSheet
 import os
+import re
 
 app = Flask(__name__)
 app.secret_key = "hostel_secret_key"
@@ -36,14 +37,22 @@ def register():
 
     if request.method == "POST":
 
-        name = request.form["name"]
-        rollno = request.form["rollno"]
+        name = request.form["name"].strip()
+        rollno = request.form["rollno"].strip()
         department = request.form["department"]
         year = request.form["year"]
         gender = request.form["gender"]
-        email = request.form["email"]
-        phone = request.form["phone"]
+        email = request.form["email"].strip()
+        phone = request.form["phone"].strip()
         password = request.form["password"]
+
+        # Validate name - only letters and spaces
+        if not re.fullmatch(r"[A-Za-z ]+", name):
+            return "Invalid name. Name should contain only letters and spaces."
+
+        # Validate phone number - exactly 10 digits
+        if not re.fullmatch(r"[0-9]{10}", phone):
+            return "Invalid phone number. Phone number must contain exactly 10 digits."
 
         hashed_password = generate_password_hash(password)
 
@@ -80,6 +89,7 @@ def register():
             return "Email or Roll Number already registered."
 
     return render_template("register.html")
+
 
 
 # ---------------- STUDENT LOGIN ----------------
